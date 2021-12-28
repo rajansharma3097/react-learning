@@ -4,38 +4,70 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-class Toggle extends React.Component {
+function UserGreeting(props) {
+  return <h1>Welcome Back!!</h1>;
+}
+
+function GuestGretting(props) {
+  return <h1>Please sign up.</h1>;
+}
+
+function Greeting(props) {
+  const isLoggedIn = props.isLoggedIn;
+  if (isLoggedIn) {
+    return <UserGreeting />
+  } else {
+    return <GuestGretting />
+  }
+}
+
+function LoginButton(props) {
+  return (
+    <button onClick={props.onClick}>Login</button>
+  );
+}
+
+function LogoutButton(props) {
+  return (
+    <button onClick={props.onClick}>Logout</button>
+  );
+}
+
+class LoginControl extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isToggleOn: true };
-
-    // This binding is necessary to make `this` work in the callback
-    // this.handleClick = this.handleClick.bind(this);
+    this.handleLoginClick = this.handleLoginClick.bind(this);
+    this.handleLogoutClick = this.handleLogoutClick.bind(this);
+    this.state = { isLoggedIn: false };
   }
 
-  // handleClick() {
-  //   this.setState(prevState => ({
-  //     isToggleOn: !prevState.isToggleOn
-  //   }));
-  // }
+  handleLoginClick() {
+    this.setState({ isLoggedIn: true });
+  }
 
-  handleClick = () => {
-    this.setState(prevState => ({
-      isToggleOn: !prevState.isToggleOn
-    }));
+  handleLogoutClick() {
+    this.setState({ isLoggedIn: false });
   }
 
   render() {
-    return (
-      <button onClick={this.handleClick}>
-        {this.state.isToggleOn ? 'ON' : 'OFF'}
-      </button>
-    );
+    const isLoggedIn = this.state.isLoggedIn;
+    let button;
+    if (isLoggedIn) {
+      button = <LogoutButton onClick={this.handleLogoutClick} />;
+    } else {
+      button = <LoginButton onClick={this.handleLoginClick} />;
+    }
+
+    return (<div>
+      <Greeting isLoggedIn={isLoggedIn} />
+      {isLoggedIn}
+      {button}
+    </div>);
   }
 }
 
 ReactDOM.render(
-  <Toggle />,
+  <LoginControl />,
   document.getElementById('root')
 );
 
